@@ -2189,7 +2189,7 @@ var VirtualList = defineComponent({
      */
 
 
-    reactive({
+    var drag = reactive({
       from: undefined,
       to: undefined
     });
@@ -2198,7 +2198,15 @@ var VirtualList = defineComponent({
     onMounted(function () {
       sortable.value = new Sortable(wrapper.value, {
         draggable: '.handle',
-        animation: 0
+        animation: 0,
+        onDrag: function onDrag(from) {
+          drag.from = from;
+        },
+        onDrop: function onDrop(list, from, to, changed) {
+          drag.to = to;
+          emit('reorder', drag);
+          console.log(drag, changed);
+        }
       });
     });
     /**

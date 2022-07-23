@@ -304,16 +304,17 @@ export default defineComponent({
     const wrapper = templateRef('wrapper');
     onMounted(() => {
       sortable.value = new Sortable(wrapper.value, {
-          draggable: '.handle',
-          animation: 0,
-        },
-        (from) => {
+        draggable: '.handle',
+        animation: 0,
+
+        onDrag: (from) => {
           drag.from = from;
         },
 
-        (list, from, to, changed) => {
+        onDrop: (list, from, to, changed) => {
           drag.to = to
           emit('reorder', drag)
+          console.log(drag, changed)
 
           if (changed) {
 
