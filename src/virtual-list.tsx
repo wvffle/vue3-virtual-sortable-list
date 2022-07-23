@@ -295,8 +295,8 @@ export default defineComponent({
     /**
      * Sortable
      */
-    const sortable = ref()
-    const wrapper = templateRef()
+    const sortable = ref();
+    const wrapper = templateRef('wrapper');
 
     /**
      * life cycles
