@@ -5,13 +5,14 @@ import {
   onMounted,
   onUnmounted,
   ref,
-  VNode,
   watch,
 } from 'vue';
 import Virtual from './virtual';
 import { VirtualProps } from './props';
 import Slot from './components/Slot';
 import { Item } from './components/Item';
+import { templateRef } from '@vueuse/core';
+import Sortable from 'sortable-dnd';
 
 enum EVENT_TYPE {
   ITEM = 'itemResize',
@@ -292,6 +293,12 @@ export default defineComponent({
     };
 
     /**
+     * Sortable
+     */
+    const sortable = ref()
+    const wrapper = templateRef()
+
+    /**
      * life cycles
      */
     onBeforeMount(() => {
@@ -304,6 +311,13 @@ export default defineComponent({
     });
 
     onMounted(() => {
+      // sortable
+      console.log('wrapper', wrapper.value);
+      sortable.value = new Sortable(wrapper.value, {
+
+      });
+      console.log('sortable', sortable.value);
+
       // set position
       if (props.start) {
         scrollToIndex(props.start);
@@ -340,14 +354,6 @@ export default defineComponent({
       scrollToIndex,
     });
 
-    /**
-     * Sortable
-     */
-    let list: VNode;
-    onMounted(() => {
-      console.log(list);
-    });
-
     return () => {
       const {
         pageMode,
@@ -373,12 +379,6 @@ export default defineComponent({
         : paddingStyle;
       const { header, footer } = slots;
 
-      list = (
-        <WrapTag ref="list" class={wrapClass} style={wrapperStyle}>
-          {getRenderSlots()}
-        </WrapTag>
-      );
-
       return (
         <RootTag ref={root} onScroll={!pageMode && onScroll}>
           {/* header slot */}
@@ -396,7 +396,9 @@ export default defineComponent({
           )}
 
           {/* main list */}
-          {list}
+          <WrapTag ref="wrapper" class={wrapClass} style={wrapperStyle}>
+            {getRenderSlots()}
+          </WrapTag>
 
           {/* footer slot */}
           {footer && (

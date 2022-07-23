@@ -967,9 +967,14 @@ var VirtualList = defineComponent({
       return virtual.sizes.size;
     };
     /**
-     * life cycles
+     * Sortable
      */
 
+
+    ref();
+    /**
+     * life cycles
+     */
 
     onBeforeMount(function () {
       installVirtual();
@@ -979,6 +984,7 @@ var VirtualList = defineComponent({
       scrollToOffset(virtual.offset);
     });
     onMounted(function () {
+      // sortable
       // set position
       if (props.start) {
         scrollToIndex(props.start);
@@ -1014,14 +1020,6 @@ var VirtualList = defineComponent({
       scrollToOffset: scrollToOffset,
       scrollToIndex: scrollToIndex
     });
-    /**
-     * Sortable
-     */
-
-    var list;
-    onMounted(function () {
-      console.log(list);
-    });
     return function () {
       var pageMode = props.pageMode,
           RootTag = props.rootTag,
@@ -1043,15 +1041,6 @@ var VirtualList = defineComponent({
       var wrapperStyle = wrapStyle ? Object.assign({}, wrapStyle, paddingStyle) : paddingStyle;
       var header = slots.header,
           footer = slots.footer;
-      list = createVNode(WrapTag, {
-        "ref": "list",
-        "class": wrapClass,
-        "style": wrapperStyle
-      }, {
-        "default": function _default() {
-          return [getRenderSlots()];
-        }
-      });
       return createVNode(RootTag, {
         "ref": root,
         "onScroll": !pageMode && onScroll
@@ -1068,7 +1057,15 @@ var VirtualList = defineComponent({
             "default": function _default() {
               return [header()];
             }
-          }), list, footer && createVNode(Slot, {
+          }), createVNode(WrapTag, {
+            "ref": "list",
+            "class": wrapClass,
+            "style": wrapperStyle
+          }, {
+            "default": function _default() {
+              return [getRenderSlots()];
+            }
+          }), footer && createVNode(Slot, {
             "class": footerClass,
             "style": footerStyle,
             "tag": footerTag,

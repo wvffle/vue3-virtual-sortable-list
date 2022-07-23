@@ -54,6 +54,7 @@
     "vue": "^3.2.2"
   },
   "dependencies": {
+    "@vueuse/core": "^8.9.4",
     "sortable-dnd": "^0.2.7"
   }
 }
