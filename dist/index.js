@@ -2205,7 +2205,7 @@ var VirtualList = defineComponent({
         onDrop: function onDrop(list, from, to, changed) {
           drag.to = to;
           emit('reorder', drag);
-          console.log(drag, changed);
+          console.log(drag, list, from, to, changed);
         }
       });
     });
