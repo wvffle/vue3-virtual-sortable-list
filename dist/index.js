@@ -730,14 +730,6 @@ var VirtualList = defineComponent({
     var shepherd = ref(null);
     var virtual;
     /**
-     * Sortable
-     */
-
-    var list = ref();
-    onMounted(function () {
-      console.log(list.value);
-    });
-    /**
      * watch
      */
 
@@ -1022,6 +1014,14 @@ var VirtualList = defineComponent({
       scrollToOffset: scrollToOffset,
       scrollToIndex: scrollToIndex
     });
+    /**
+     * Sortable
+     */
+
+    var list = ref();
+    onMounted(function () {
+      console.log(list.value);
+    });
     return function () {
       var pageMode = props.pageMode,
           RootTag = props.rootTag,
@@ -1043,6 +1043,15 @@ var VirtualList = defineComponent({
       var wrapperStyle = wrapStyle ? Object.assign({}, wrapStyle, paddingStyle) : paddingStyle;
       var header = slots.header,
           footer = slots.footer;
+      list.value = createVNode(WrapTag, {
+        "ref": "list",
+        "class": wrapClass,
+        "style": wrapperStyle
+      }, {
+        "default": function _default() {
+          return [getRenderSlots()];
+        }
+      });
       return createVNode(RootTag, {
         "ref": root,
         "onScroll": !pageMode && onScroll
@@ -1059,15 +1068,7 @@ var VirtualList = defineComponent({
             "default": function _default() {
               return [header()];
             }
-          }), createVNode(WrapTag, {
-            "ref": "list",
-            "class": wrapClass,
-            "style": wrapperStyle
-          }, {
-            "default": function _default() {
-              return [getRenderSlots()];
-            }
-          }), footer && createVNode(Slot, {
+          }), list.value, footer && createVNode(Slot, {
             "class": footerClass,
             "style": footerStyle,
             "tag": footerTag,

@@ -41,14 +41,6 @@ export default defineComponent({
     let virtual: Virtual;
 
     /**
-     * Sortable
-     */
-    const list = ref();
-    onMounted(() => {
-      console.log(list.value);
-    });
-
-    /**
      * watch
      */
     watch(
@@ -347,6 +339,14 @@ export default defineComponent({
       scrollToIndex,
     });
 
+    /**
+     * Sortable
+     */
+    const list = ref();
+    onMounted(() => {
+      console.log(list.value);
+    });
+
     return () => {
       const {
         pageMode,
@@ -372,6 +372,12 @@ export default defineComponent({
         : paddingStyle;
       const { header, footer } = slots;
 
+      list.value = (
+        <WrapTag ref="list" class={wrapClass} style={wrapperStyle}>
+          {getRenderSlots()}
+        </WrapTag>
+      );
+
       return (
         <RootTag ref={root} onScroll={!pageMode && onScroll}>
           {/* header slot */}
@@ -389,9 +395,7 @@ export default defineComponent({
           )}
 
           {/* main list */}
-          <WrapTag ref="list" class={wrapClass} style={wrapperStyle}>
-            {getRenderSlots()}
-          </WrapTag>
+          {list.value}
 
           {/* footer slot */}
           {footer && (
