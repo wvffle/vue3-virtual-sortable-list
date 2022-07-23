@@ -295,6 +295,7 @@ export default defineComponent({
     /**
      * Sortable
      */
+    console.log('with sortable support');
     const sortable = ref();
     const wrapper = templateRef('wrapper');
     onMounted(() => console.log('wrapper', wrapper.value));
