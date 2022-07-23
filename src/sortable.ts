@@ -31,12 +31,12 @@ class Sortable {
   });
 
   options = {}
-  onDrag = (el: HTMLElement) => {}
+  onDrag = (el: HTMLElement | undefined) => {}
   onDrop = (changed: boolean) => {}
 
   constructor(
     options: SortableOptions,
-    onDrag: (el: HTMLElement) => void,
+    onDrag: (el: HTMLElement | undefined) => void,
     onDrop: (changed: boolean) => void,
   ) {
     this.options = options
