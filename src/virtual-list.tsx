@@ -297,12 +297,10 @@ export default defineComponent({
      */
     const sortable = ref();
     const wrapper = templateRef('wrapper');
-    onMounted(() => console.log('wrapper', wrapper.value));
     onMounted(() => {
       sortable.value = new Sortable(wrapper.value, {
-
+        draggable: '.handle',
       });
-      console.log('sortable', sortable.value);
     });
 
     /**

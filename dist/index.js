@@ -2192,11 +2192,9 @@ var VirtualList = defineComponent({
     var sortable = ref();
     var wrapper = templateRef('wrapper');
     onMounted(function () {
-      return console.log('wrapper', wrapper.value);
-    });
-    onMounted(function () {
-      sortable.value = new Sortable(wrapper.value, {});
-      console.log('sortable', sortable.value);
+      sortable.value = new Sortable(wrapper.value, {
+        draggable: '.handle'
+      });
     });
     /**
      * life cycles
