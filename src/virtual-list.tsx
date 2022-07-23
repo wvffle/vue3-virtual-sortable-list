@@ -12,7 +12,7 @@ import { VirtualProps } from './props';
 import Slot from './components/Slot';
 import { Item } from './components/Item';
 import { templateRef } from '@vueuse/core';
-import Sortable from 'sortable-dnd';
+import Sortable from 'sortable-dnd/src/index.js';
 
 enum EVENT_TYPE {
   ITEM = 'itemResize',
@@ -295,7 +295,6 @@ export default defineComponent({
     /**
      * Sortable
      */
-    console.log('with sortable support');
     const sortable = ref();
     const wrapper = templateRef('wrapper');
     onMounted(() => console.log('wrapper', wrapper.value));
