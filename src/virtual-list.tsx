@@ -4,6 +4,7 @@ import {
   onBeforeMount,
   onMounted,
   onUnmounted,
+  reactive,
   ref,
   watch,
 } from 'vue';
@@ -295,11 +296,29 @@ export default defineComponent({
     /**
      * Sortable
      */
+    const drag = reactive({
+      from: undefined,
+      to: undefined
+    });
     const sortable = ref();
     const wrapper = templateRef('wrapper');
     onMounted(() => {
       sortable.value = new Sortable(wrapper.value, {
         draggable: '.handle',
+        animation: 0,
+
+        onDrag: (from) => {
+          drag.from = from;
+        },
+
+        onDrop: (list, from, to, changed) => {
+          drag.to = to
+          emit('reorder', drag)
+
+          if (changed) {
+
+          }
+        }
       });
     });
 

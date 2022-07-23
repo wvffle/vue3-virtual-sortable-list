@@ -3,7 +3,7 @@
 * open source under the MIT license
 * https://github.com/reactjser/vue3-virtual-scroll-list#readme
 */
-import { computed, onMounted, onUpdated, onUnmounted, defineComponent, ref, createVNode, getCurrentInstance, nextTick, customRef, watch, onBeforeMount, onActivated } from 'vue';
+import { computed, onMounted, onUpdated, onUnmounted, defineComponent, ref, createVNode, getCurrentInstance, nextTick, customRef, watch, reactive, onBeforeMount, onActivated } from 'vue';
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
@@ -2189,11 +2189,23 @@ var VirtualList = defineComponent({
      */
 
 
+    var drag = reactive({
+      from: undefined,
+      to: undefined
+    });
     var sortable = ref();
     var wrapper = templateRef('wrapper');
     onMounted(function () {
       sortable.value = new Sortable(wrapper.value, {
-        draggable: '.handle'
+        draggable: '.handle',
+        animation: 0,
+        onDrag: function onDrag(from) {
+          drag.from = from;
+        },
+        onDrop: function onDrop(list, from, to, changed) {
+          drag.to = to;
+          emit('reorder', drag);
+        }
       });
     });
     /**
