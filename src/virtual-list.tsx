@@ -8,8 +8,9 @@ import {
   watch,
 } from 'vue';
 import Virtual from './virtual';
-import { Item, Slot } from './item';
 import { VirtualProps } from './props';
+import Slot from './components/Slot';
+import { Item } from './components/Item';
 
 enum EVENT_TYPE {
   ITEM = 'itemResize',
@@ -38,6 +39,14 @@ export default defineComponent({
     const root = ref<HTMLElement | null>();
     const shepherd = ref<HTMLDivElement | null>(null);
     let virtual: Virtual;
+
+    /**
+     * Sortable
+     */
+    const list = ref();
+    onMounted(() => {
+      console.log(list.value);
+    });
 
     /**
      * watch
@@ -202,6 +211,7 @@ export default defineComponent({
             typeof dataKey === 'function'
               ? dataKey(dataSource)
               : dataSource[dataKey];
+
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(
               <Item
@@ -379,7 +389,7 @@ export default defineComponent({
           )}
 
           {/* main list */}
-          <WrapTag class={wrapClass} style={wrapperStyle}>
+          <WrapTag ref="list" class={wrapClass} style={wrapperStyle}>
             {getRenderSlots()}
           </WrapTag>
 
