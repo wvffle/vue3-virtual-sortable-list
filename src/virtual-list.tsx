@@ -345,7 +345,7 @@ export default defineComponent({
      */
     let list: VNode;
     onMounted(() => {
-      console.log(list.ref);
+      console.log(list);
     });
 
     return () => {

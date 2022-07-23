@@ -1020,7 +1020,7 @@ var VirtualList = defineComponent({
 
     var list;
     onMounted(function () {
-      console.log(list.ref);
+      console.log(list);
     });
     return function () {
       var pageMode = props.pageMode,
