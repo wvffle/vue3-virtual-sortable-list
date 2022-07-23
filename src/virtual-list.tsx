@@ -297,6 +297,13 @@ export default defineComponent({
      */
     const sortable = ref();
     const wrapper = templateRef('wrapper');
+    onMounted(() => console.log('wrapper', wrapper.value));
+    onMounted(() => {
+      sortable.value = new Sortable(wrapper.value, {
+
+      });
+      console.log('sortable', sortable.value);
+    });
 
     /**
      * life cycles
@@ -311,13 +318,6 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      // sortable
-      console.log('wrapper', wrapper.value);
-      sortable.value = new Sortable(wrapper.value, {
-
-      });
-      console.log('sortable', sortable.value);
-
       // set position
       if (props.start) {
         scrollToIndex(props.start);
