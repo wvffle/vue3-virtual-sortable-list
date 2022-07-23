@@ -1018,9 +1018,9 @@ var VirtualList = defineComponent({
      * Sortable
      */
 
-    var list = ref();
+    var list;
     onMounted(function () {
-      console.log(list.value);
+      console.log(list.ref);
     });
     return function () {
       var pageMode = props.pageMode,
@@ -1043,7 +1043,7 @@ var VirtualList = defineComponent({
       var wrapperStyle = wrapStyle ? Object.assign({}, wrapStyle, paddingStyle) : paddingStyle;
       var header = slots.header,
           footer = slots.footer;
-      list.value = createVNode(WrapTag, {
+      list = createVNode(WrapTag, {
         "ref": "list",
         "class": wrapClass,
         "style": wrapperStyle
@@ -1068,7 +1068,7 @@ var VirtualList = defineComponent({
             "default": function _default() {
               return [header()];
             }
-          }), list.value, footer && createVNode(Slot, {
+          }), list, footer && createVNode(Slot, {
             "class": footerClass,
             "style": footerStyle,
             "tag": footerTag,

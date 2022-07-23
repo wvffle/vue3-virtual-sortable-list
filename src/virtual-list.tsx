@@ -5,6 +5,7 @@ import {
   onMounted,
   onUnmounted,
   ref,
+  VNode,
   watch,
 } from 'vue';
 import Virtual from './virtual';
@@ -342,9 +343,9 @@ export default defineComponent({
     /**
      * Sortable
      */
-    const list = ref();
+    let list: VNode;
     onMounted(() => {
-      console.log(list.value);
+      console.log(list.ref);
     });
 
     return () => {
@@ -372,7 +373,7 @@ export default defineComponent({
         : paddingStyle;
       const { header, footer } = slots;
 
-      list.value = (
+      list = (
         <WrapTag ref="list" class={wrapClass} style={wrapperStyle}>
           {getRenderSlots()}
         </WrapTag>
@@ -395,7 +396,7 @@ export default defineComponent({
           )}
 
           {/* main list */}
-          {list.value}
+          {list}
 
           {/* footer slot */}
           {footer && (
