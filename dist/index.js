@@ -3,7 +3,7 @@
 * open source under the MIT license
 * https://github.com/reactjser/vue3-virtual-scroll-list#readme
 */
-import { computed, onMounted, onUpdated, onUnmounted, defineComponent, ref, createVNode, getCurrentInstance, nextTick, customRef, watch, reactive, onBeforeMount, onActivated } from 'vue';
+import { computed, onMounted, onUpdated, onUnmounted, defineComponent, ref, createVNode, getCurrentInstance, nextTick, customRef, shallowReactive, watch, reactive, onBeforeMount, onActivated } from 'vue';
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
@@ -1495,7 +1495,7 @@ var supportDraggable = documentExists && !ChromeForAndroid && !IOS && 'draggable
  * @param  {Object}       options
  */
 
-function Sortable(el, options) {
+function Sortable$1(el, options) {
   if (!(el && el.nodeType && el.nodeType === 1)) {
     throw "Sortable: `el` must be an HTMLElement, not ".concat({}.toString.call(el));
   }
@@ -1578,8 +1578,8 @@ function Sortable(el, options) {
   this._bindEventListener();
 }
 
-Sortable.prototype = {
-  constructor: Sortable,
+Sortable$1.prototype = {
+  constructor: Sortable$1,
 
   /**
    * Destroy
@@ -1912,13 +1912,198 @@ Sortable.prototype = {
     this.dropEl = null;
   }
 };
-Sortable.prototype.utils = {
+Sortable$1.prototype.utils = {
   getRect: getRect,
   getOffset: getOffset,
   debounce: debounce,
   throttle: throttle,
   getParentAutoScrollElement: getParentAutoScrollElement
 };
+
+var Sortable = /*#__PURE__*/function () {
+  function Sortable(options, onDrag, onDrop) {
+    _classCallCheck(this, Sortable);
+
+    _defineProperty(this, "list", []);
+
+    _defineProperty(this, "cloneList", []);
+
+    _defineProperty(this, "drag", null);
+
+    _defineProperty(this, "dragElement", null);
+
+    _defineProperty(this, "rangeIsChanged", false);
+
+    _defineProperty(this, "dragState", shallowReactive({
+      from: {
+        key: undefined,
+        item: undefined,
+        index: -1
+      },
+      to: {
+        key: undefined,
+        item: undefined,
+        index: -1
+      }
+    }));
+
+    _defineProperty(this, "options", {});
+
+    _defineProperty(this, "onDrag", function (el) {});
+
+    _defineProperty(this, "onDrop", function (changed) {});
+
+    this.options = options;
+    this.onDrag = onDrag;
+    this.onDrop = onDrop;
+    this.list = options.list;
+    this.init();
+  }
+
+  _createClass(Sortable, [{
+    key: "set",
+    value: function set(key, value) {
+      if (key === 'list') {
+        this.list = value; // When the list data changes when dragging, need to execute onDrag function
+
+        if (this.dragElement) this.dragStart(this.dragElement, false);
+      } else {
+        var _this$drag;
+
+        this.options[key] = value;
+        (_this$drag = this.drag) === null || _this$drag === void 0 ? void 0 : _this$drag.set(key, value);
+      }
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      var _this = this;
+
+      var _this$options = this.options,
+          disabled = _this$options.disabled,
+          dragging = _this$options.dragging,
+          draggable = _this$options.draggable,
+          ghostClass = _this$options.ghostClass,
+          ghostStyle = _this$options.ghostStyle,
+          chosenClass = _this$options.chosenClass;
+      this.drag = new Sortable$1(this.options.scrollEl, {
+        disabled: disabled,
+        dragging: dragging,
+        draggable: draggable,
+        ghostClass: ghostClass,
+        ghostStyle: ghostStyle,
+        chosenClass: chosenClass,
+        animation: 0,
+        autoScroll: false,
+        scrollStep: 5,
+        scrollThreshold: 15,
+        onChange: function onChange(from, to) {
+          return _this.onChange(from, to);
+        },
+        onDrag: function onDrag(dragEl) {
+          return _this.dragStart(dragEl);
+        },
+        onDrop: function onDrop(changed) {
+          return _this.dragEnd(changed);
+        }
+      });
+    }
+  }, {
+    key: "dragStart",
+    value: function dragStart(dragEl) {
+      var _this2 = this;
+
+      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      this.dragElement = dragEl;
+      this.cloneList = _toConsumableArray(this.list);
+      var key = dragEl.getAttribute('data-key');
+      this.list.forEach(function (item, index) {
+        if (_this2.options.getDataKey(item) === key) {
+          _this2.dragState.from = {
+            item: item,
+            index: index,
+            key: key
+          };
+        }
+      });
+
+      if (callback) {
+        this.rangeIsChanged = false; // on-drag callback
+
+        this.onDrag(this.dragState.from, dragEl);
+      } else {
+        this.rangeIsChanged = true;
+      }
+    }
+  }, {
+    key: "onChange",
+    value: function onChange(_old_, _new_) {
+      var _this3 = this;
+
+      var oldKey = this.dragState.from.key;
+
+      var newKey = _new_.node.getAttribute('data-key');
+
+      var from = {
+        item: null,
+        index: -1
+      };
+      var to = {
+        item: null,
+        index: -1
+      };
+      this.cloneList.forEach(function (el, index) {
+        var key = _this3.options.getDataKey(el);
+
+        if (key == oldKey) Object.assign(from, {
+          item: el,
+          index: index
+        });
+        if (key == newKey) Object.assign(to, {
+          item: el,
+          index: index
+        });
+      });
+      this.cloneList.splice(from.index, 1);
+      this.cloneList.splice(to.index, 0, from.item);
+    }
+  }, {
+    key: "dragEnd",
+    value: function dragEnd(changed) {
+      var _this4 = this;
+
+      if (this.rangeIsChanged && this.dragElement) this.dragElement.remove();
+      var getDataKey = this.options.getDataKey;
+      var from = this.dragState.from;
+      this.cloneList.forEach(function (el, index) {
+        if (getDataKey(el) == from.key) _this4.dragState.to = {
+          index: index,
+          item: _this4.list[index],
+          key: getDataKey(el)
+        };
+      }); // on-drop callback
+
+      this.onDrop(this.cloneList, from, this.dragState.to, changed);
+      this.list = _toConsumableArray(this.cloneList);
+      this.clear();
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.dragElement = null;
+      this.rangeIsChanged = false;
+      this.dragState = new DragState();
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.drag && this.drag.destroy();
+      this.drag = null;
+    }
+  }]);
+
+  return Sortable;
+}();
 
 var EVENT_TYPE;
 
@@ -2189,7 +2374,7 @@ var VirtualList = defineComponent({
      */
 
 
-    reactive({
+    var drag = reactive({
       from: undefined,
       to: undefined
     });
@@ -2199,6 +2384,12 @@ var VirtualList = defineComponent({
       sortable.value = new Sortable(wrapper.value, {
         draggable: '.handle',
         animation: 0
+      }, function (from) {
+        drag.from = from;
+      }, function (list, from, to, changed) {
+        drag.to = to;
+        emit('reorder', drag);
+        console.log(drag, list, from, to, changed);
       });
     });
     /**

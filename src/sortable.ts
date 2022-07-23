@@ -1,4 +1,4 @@
-import SortableDnd from 'sortable-dnd';
+import SortableDnd from 'sortable-dnd/src/index.js';
 import { reactive, shallowReactive } from 'vue';
 
 export interface DragItem {
@@ -30,11 +30,19 @@ class Sortable {
     to: { key: undefined, item: undefined, index: -1 },
   });
 
+  options = {}
+  onDrag = (el: HTMLElement) => {}
+  onDrop = (changed: boolean) => {}
+
   constructor(
-    public options: SortableOptions,
-    public onDrag: (el: HTMLElement) => void,
-    public onDrop: (changed: HTMLElement) => void,
+    options: SortableOptions,
+    onDrag: (el: HTMLElement) => void,
+    onDrop: (changed: boolean) => void,
   ) {
+    this.options = options
+    this.onDrag = onDrag
+    this.onDrop = onDrop
+
     this.list = options.list;
     this.init();
   }
