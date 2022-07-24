@@ -13,7 +13,7 @@ import { VirtualProps } from './props';
 import Slot from './components/Slot';
 import { Item } from './components/Item';
 import { templateRef } from '@vueuse/core';
-import Sortable from './sortable';
+import Sortable, { DragItem, SortableOptions } from './sortable';
 
 enum EVENT_TYPE {
   ITEM = 'itemResize',
@@ -298,30 +298,33 @@ export default defineComponent({
      */
     const drag = reactive({
       from: undefined,
-      to: undefined
-    });
+      to: undefined,
+    } as { from?: DragItem; to?: DragItem });
+
     const sortable = ref();
     const wrapper = templateRef('wrapper');
     onMounted(() => {
-      sortable.value = new Sortable(
-        {
-          scrollEl: wrapper.value,
-          draggable: '.handle'
+      sortable.value = new Sortable({
+        scrollEl: wrapper.value as HTMLElement,
+        list: props.dataSources,
+        draggable: '.handle',
+        getDataKey(item: unknown) {
+          // TODO
+          return '';
         },
-        (from) => {
+        onDrag(from) {
           drag.from = from;
         },
-
-        (list, from, to, changed) => {
+        onDrop(list, from, to, changed) {
           drag.to = to;
           emit('reorder', drag);
           console.log(drag, list, from, to, changed);
 
           if (changed) {
-
+            // TODO
           }
         },
-      );
+      } as SortableOptions);
     });
 
     /**

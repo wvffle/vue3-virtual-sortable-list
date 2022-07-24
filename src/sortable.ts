@@ -3,26 +3,34 @@ import { reactive, shallowReactive } from 'vue';
 
 export interface DragItem {
   key?: string;
-  item: any;
+  item: unknown;
   index: number;
 }
 
 export interface SortableOptions {
-  list: [];
+  list: unknown[];
   scrollEl: HTMLElement;
-  disabled: boolean;
-  dragging: boolean;
+  disabled?: boolean;
+  dragging?: boolean;
   draggable: string;
-  ghostClass: string;
-  ghostStyle: string;
-  chosenClass: string;
+  ghostClass?: string;
+  ghostStyle?: string;
+  chosenClass?: string;
+  getDataKey: (item: unknown) => string;
+  onDrag: (from: DragItem, dragEl: HTMLElement) => void;
+  onDrop: (
+    updatedList: [],
+    from: DragItem,
+    to: DragItem,
+    changed: boolean,
+  ) => void;
 }
 
 class Sortable {
-  list = [];
-  cloneList = [];
+  list = [] as unknown[];
+  cloneList = [] as unknown[];
 
-  drag = null;
+  drag: SortableDnd = null;
   dragElement: HTMLElement | null = null;
   rangeIsChanged = false;
 
@@ -32,23 +40,15 @@ class Sortable {
   });
 
   options = {} as SortableOptions;
-  onDrag = (el: HTMLElement | undefined) => {}
-  onDrop = (changed: boolean) => {}
 
-  constructor(
-    options: SortableOptions,
-    onDrag: (el: HTMLElement | undefined) => void,
-    onDrop: (changed: boolean) => void,
-  ) {
-    this.options = options;
-    this.onDrag = onDrag;
-    this.onDrop = onDrop;
-
+  constructor(options: SortableOptions) {
     this.list = options.list;
+    this.options = options;
+
     this.init();
   }
 
-  set (key: keyof SortableOptions, value: never): void {
+  set(key: keyof SortableOptions, value: never): void {
     if (key === 'list') {
       this.list = value;
       // When the list data changes when dragging, need to execute onDrag function
@@ -59,7 +59,7 @@ class Sortable {
     }
   }
 
-  init() {
+  init(): void {
     const {
       disabled,
       dragging,
@@ -101,7 +101,7 @@ class Sortable {
     if (callback) {
       this.rangeIsChanged = false;
       // on-drag callback
-      this.onDrag(this.dragState.from, dragEl);
+      this.options.onDrag(this.dragState.from, dragEl);
     } else {
       this.rangeIsChanged = true;
     }
@@ -137,7 +137,7 @@ class Sortable {
         };
     });
     // on-drop callback
-    this.onDrop(this.cloneList, from, this.dragState.to, changed);
+    this.options.onDrop(this.cloneList, from, this.dragState.to, changed);
     this.list = [...this.cloneList];
     this.clear();
   }
