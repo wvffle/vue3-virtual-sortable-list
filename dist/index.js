@@ -1921,7 +1921,7 @@ Sortable$1.prototype.utils = {
 };
 
 var Sortable = /*#__PURE__*/function () {
-  function Sortable(options, onDrag, onDrop) {
+  function Sortable(options) {
     _classCallCheck(this, Sortable);
 
     _defineProperty(this, "list", []);
@@ -1949,14 +1949,8 @@ var Sortable = /*#__PURE__*/function () {
 
     _defineProperty(this, "options", {});
 
-    _defineProperty(this, "onDrag", function (el) {});
-
-    _defineProperty(this, "onDrop", function (changed) {});
-
-    this.options = options;
-    this.onDrag = onDrag;
-    this.onDrop = onDrop;
     this.list = options.list;
+    this.options = options;
     this.init();
   }
 
@@ -2030,7 +2024,7 @@ var Sortable = /*#__PURE__*/function () {
       if (callback) {
         this.rangeIsChanged = false; // on-drag callback
 
-        this.onDrag(this.dragState.from, dragEl);
+        this.options.onDrag(this.dragState.from, dragEl);
       } else {
         this.rangeIsChanged = true;
       }
@@ -2083,7 +2077,7 @@ var Sortable = /*#__PURE__*/function () {
         };
       }); // on-drop callback
 
-      this.onDrop(this.cloneList, from, this.dragState.to, changed);
+      this.options.onDrop(this.cloneList, from, this.dragState.to, changed);
       this.list = _toConsumableArray(this.cloneList);
       this.clear();
     }
@@ -2381,15 +2375,22 @@ var VirtualList = defineComponent({
     var sortable = ref();
     var wrapper = templateRef('wrapper');
     onMounted(function () {
-      sortable.value = new Sortable(wrapper.value, {
+      sortable.value = new Sortable({
+        scrollEl: wrapper.value,
+        list: props.dataSources,
         draggable: '.handle',
-        animation: 0
-      }, function (from) {
-        drag.from = from;
-      }, function (list, from, to, changed) {
-        drag.to = to;
-        emit('reorder', drag);
-        console.log(drag, list, from, to, changed);
+        getDataKey: function getDataKey(item) {
+          // TODO
+          return '';
+        },
+        onDrag: function onDrag(from) {
+          drag.from = from;
+        },
+        onDrop: function onDrop(list, from, to, changed) {
+          drag.to = to;
+          emit('reorder', drag);
+          console.log(drag, list, from, to, changed);
+        }
       });
     });
     /**
