@@ -212,7 +212,7 @@ export default defineComponent({
             slots.push(
               <Item
                 index={index}
-                dataKey={uniqueKey}
+                data-key={uniqueKey}
                 tag={itemTag}
                 event={EVENT_TYPE.ITEM}
                 horizontal={isHorizontal}

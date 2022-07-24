@@ -2305,7 +2305,7 @@ var VirtualList = defineComponent({
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(createVNode(Item, {
               "index": index,
-              "dataKey": uniqueKey,
+              "data-key": uniqueKey,
               "tag": itemTag,
               "event": EVENT_TYPE.ITEM,
               "horizontal": isHorizontal,
