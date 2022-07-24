@@ -2224,8 +2224,12 @@ var VirtualList = defineComponent({
     };
 
     var getDataKey = function getDataKey(dataSource) {
-      var dataKey = props.dataKey;
-      return typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey !== null && dataKey !== void 0 ? dataKey : 'id'];
+      var _dataKey, _dataKey2;
+
+      if (!dataSource) return 'id';
+      var _props$dataKey = props.dataKey,
+          dataKey = _props$dataKey === void 0 ? 'id' : _props$dataKey;
+      return typeof dataKey === 'function' ? (_dataKey = dataKey(dataSource)) !== null && _dataKey !== void 0 ? _dataKey : 'id' : (_dataKey2 = dataSource[dataKey]) !== null && _dataKey2 !== void 0 ? _dataKey2 : 'id';
     };
 
     var getUniqueIdFromDataSources = function getUniqueIdFromDataSources() {

@@ -136,10 +136,11 @@ export default defineComponent({
     };
 
     const getDataKey = (dataSource: unknown): string => {
-      const { dataKey } = props;
+      if (!dataSource) return 'id';
+      const { dataKey = 'id' } = props;
       return typeof dataKey === 'function'
-        ? dataKey(dataSource)
-        : (dataSource as Record<string, unknown>)[dataKey ?? 'id'];
+        ? dataKey(dataSource) ?? 'id'
+        : (dataSource as Record<string, unknown>)[dataKey] ?? 'id';
     };
 
     const getUniqueIdFromDataSources = () => {
