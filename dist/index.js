@@ -2412,6 +2412,7 @@ var VirtualList = defineComponent({
 
           if (changed) {
             console.log('@', sortable.value.rangeIsChanged);
+            return false;
           }
         }
       });

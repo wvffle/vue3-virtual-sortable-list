@@ -324,6 +324,7 @@ export default defineComponent({
 
           if (changed) {
             console.log('@', sortable.value.rangeIsChanged);
+            return false
           }
         },
       } as SortableOptions);
