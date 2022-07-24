@@ -216,7 +216,7 @@ export default defineComponent({
                 event={EVENT_TYPE.ITEM}
                 horizontal={isHorizontal}
                 uniqueKey={uniqueKey}
-                dataKey={uniqueKey}
+                data-key={uniqueKey}
                 source={dataSource}
                 extraProps={extraProps}
                 component={dataComponent}
