@@ -70,6 +70,10 @@ export default defineComponent({
       () => props.offset,
       (newValue) => scrollToOffset(newValue),
     );
+    watch(
+      () => props.dataSources,
+      (list) => sortable.value?.set('list', list),
+    );
 
     /**
      * methods

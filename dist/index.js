@@ -2161,6 +2161,13 @@ var VirtualList = defineComponent({
     }, function (newValue) {
       return scrollToOffset(newValue);
     });
+    watch(function () {
+      return props.dataSources;
+    }, function (list) {
+      var _sortable$value;
+
+      return (_sortable$value = sortable.value) === null || _sortable$value === void 0 ? void 0 : _sortable$value.set('list', list);
+    });
     /**
      * methods
      */
