@@ -2223,13 +2223,15 @@ var VirtualList = defineComponent({
       emitEvent(offset, clientSize, scrollSize, evt);
     };
 
+    var getDataKey = function getDataKey(dataSource) {
+      var dataKey = props.dataKey;
+      return typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey !== null && dataKey !== void 0 ? dataKey : 'id'];
+    };
+
     var getUniqueIdFromDataSources = function getUniqueIdFromDataSources() {
-      var dataKey = props.dataKey,
-          _props$dataSources = props.dataSources,
+      var _props$dataSources = props.dataSources,
           dataSources = _props$dataSources === void 0 ? [] : _props$dataSources;
-      return dataSources.map(function (dataSource) {
-        return typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey];
-      });
+      return dataSources.map(getDataKey);
     };
 
     var onRangeChanged = function onRangeChanged(newRange) {
@@ -2294,7 +2296,7 @@ var VirtualList = defineComponent({
         var dataSource = dataSources[index];
 
         if (dataSource) {
-          var uniqueKey = typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey];
+          var uniqueKey = getDataKey(dataSource);
 
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(createVNode(Item, {
@@ -2388,10 +2390,7 @@ var VirtualList = defineComponent({
         scrollEl: wrapper.value,
         list: props.dataSources,
         draggable: '.handle',
-        getDataKey: function getDataKey(item) {
-          // TODO
-          return '';
-        },
+        getDataKey: getDataKey,
         onDrag: function onDrag(from) {
           drag.from = from;
         },

@@ -135,13 +135,16 @@ export default defineComponent({
       emitEvent(offset, clientSize, scrollSize, evt);
     };
 
+    const getDataKey = (dataSource: unknown): string => {
+      const { dataKey } = props;
+      return typeof dataKey === 'function'
+        ? dataKey(dataSource)
+        : (dataSource as Record<string, unknown>)[dataKey ?? 'id'];
+    };
+
     const getUniqueIdFromDataSources = () => {
-      const { dataKey, dataSources = [] } = props;
-      return dataSources.map((dataSource: any) =>
-        typeof dataKey === 'function'
-          ? dataKey(dataSource)
-          : dataSource[dataKey],
-      );
+      const { dataSources = [] } = props;
+      return dataSources.map(getDataKey);
     };
     const onRangeChanged = (newRange: any) => {
       range.value = newRange;
@@ -202,10 +205,7 @@ export default defineComponent({
       for (let index = start; index <= end; index++) {
         const dataSource = dataSources[index];
         if (dataSource) {
-          const uniqueKey =
-            typeof dataKey === 'function'
-              ? dataKey(dataSource)
-              : dataSource[dataKey];
+          const uniqueKey = getDataKey(dataSource);
 
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(
@@ -308,10 +308,7 @@ export default defineComponent({
         scrollEl: wrapper.value as HTMLElement,
         list: props.dataSources,
         draggable: '.handle',
-        getDataKey(item: unknown) {
-          // TODO
-          return '';
-        },
+        getDataKey,
         onDrag(from) {
           drag.from = from;
         },
