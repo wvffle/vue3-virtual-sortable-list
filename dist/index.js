@@ -2086,7 +2086,16 @@ var Sortable = /*#__PURE__*/function () {
     value: function clear() {
       this.dragElement = null;
       this.rangeIsChanged = false;
-      this.dragState = new DragState();
+      this.dragState.from = {
+        key: undefined,
+        item: undefined,
+        index: -1
+      };
+      this.dragState.to = {
+        key: undefined,
+        item: undefined,
+        index: -1
+      };
     }
   }, {
     key: "destroy",

@@ -145,7 +145,8 @@ class Sortable {
   clear() {
     this.dragElement = null;
     this.rangeIsChanged = false;
-    this.dragState = new DragState();
+    this.dragState.from = { key: undefined, item: undefined, index: -1 };
+    this.dragState.to = { key: undefined, item: undefined, index: -1 };
   }
 
   destroy() {
