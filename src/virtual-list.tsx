@@ -212,11 +212,11 @@ export default defineComponent({
             slots.push(
               <Item
                 index={index}
+                attrs={{ dataKey: uniqueKey }}
                 tag={itemTag}
                 event={EVENT_TYPE.ITEM}
                 horizontal={isHorizontal}
                 uniqueKey={uniqueKey}
-                data-key={uniqueKey}
                 source={dataSource}
                 extraProps={extraProps}
                 component={dataComponent}
