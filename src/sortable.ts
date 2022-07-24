@@ -90,7 +90,7 @@ class Sortable {
     this.dragElement = dragEl;
     this.cloneList = [...this.list];
 
-    const key = dragEl.getAttribute('datakey');
+    const key = dragEl.getAttribute('data-key');
 
     this.list.forEach((item, index) => {
       if (this.options.getDataKey(item) === key) {
@@ -109,7 +109,7 @@ class Sortable {
 
   onChange(_old_, _new_) {
     const oldKey = this.dragState.from.key;
-    const newKey = _new_.node.getAttribute('datakey');
+    const newKey = _new_.node.getAttribute('data-key');
 
     const from = { item: null, index: -1 };
     const to = { item: null, index: -1 };

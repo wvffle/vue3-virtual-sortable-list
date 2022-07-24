@@ -2010,7 +2010,7 @@ var Sortable = /*#__PURE__*/function () {
       var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       this.dragElement = dragEl;
       this.cloneList = _toConsumableArray(this.list);
-      var key = dragEl.getAttribute('datakey');
+      var key = dragEl.getAttribute('data-key');
       this.list.forEach(function (item, index) {
         if (_this2.options.getDataKey(item) === key) {
           _this2.dragState.from = {
@@ -2036,7 +2036,7 @@ var Sortable = /*#__PURE__*/function () {
 
       var oldKey = this.dragState.from.key;
 
-      var newKey = _new_.node.getAttribute('datakey');
+      var newKey = _new_.node.getAttribute('data-key');
 
       var from = {
         item: null,
@@ -2305,7 +2305,7 @@ var VirtualList = defineComponent({
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(createVNode(Item, {
               "index": index,
-              "datakey": uniqueKey,
+              "data-key": uniqueKey,
               "tag": itemTag,
               "event": EVENT_TYPE.ITEM,
               "horizontal": isHorizontal,
