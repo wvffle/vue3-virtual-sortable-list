@@ -1,6 +1,7 @@
 import SortableDnd from 'sortable-dnd/src/index.js';
 import { reactive, shallowReactive } from 'vue';
 
+// TODO: Get list from props dynamically
 export interface DragItem {
   key?: string;
   item: unknown;

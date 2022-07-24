@@ -317,10 +317,9 @@ export default defineComponent({
         onDrop(list, from, to, changed) {
           drag.to = to;
           emit('reorder', drag);
-          console.log(drag, list, from, to, changed);
 
           if (changed) {
-            // TODO
+            console.log('@', sortable.value.rangeIsChanged);
           }
         },
       } as SortableOptions);

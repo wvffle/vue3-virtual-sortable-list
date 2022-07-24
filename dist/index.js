@@ -2402,7 +2402,10 @@ var VirtualList = defineComponent({
         onDrop: function onDrop(list, from, to, changed) {
           drag.to = to;
           emit('reorder', drag);
-          console.log(drag, list, from, to, changed);
+
+          if (changed) {
+            console.log('@', sortable.value.rangeIsChanged);
+          }
         }
       });
     });
