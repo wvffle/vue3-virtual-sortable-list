@@ -304,10 +304,9 @@ export default defineComponent({
     const wrapper = templateRef('wrapper');
     onMounted(() => {
       sortable.value = new Sortable(
-        wrapper.value,
         {
-          draggable: '.handle',
-          animation: 0,
+          scrollEl: wrapper.value,
+          draggable: '.handle'
         },
         (from) => {
           drag.from = from;

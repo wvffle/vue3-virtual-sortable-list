@@ -9,9 +9,10 @@ export interface DragItem {
 
 export interface SortableOptions {
   list: [];
+  scrollEl: HTMLElement;
   disabled: boolean;
   dragging: boolean;
-  draggable: boolean;
+  draggable: string;
   ghostClass: string;
   ghostStyle: string;
   chosenClass: string;
@@ -30,7 +31,7 @@ class Sortable {
     to: { key: undefined, item: undefined, index: -1 },
   });
 
-  options = {}
+  options = {} as SortableOptions;
   onDrag = (el: HTMLElement | undefined) => {}
   onDrop = (changed: boolean) => {}
 
@@ -39,15 +40,15 @@ class Sortable {
     onDrag: (el: HTMLElement | undefined) => void,
     onDrop: (changed: boolean) => void,
   ) {
-    this.options = options
-    this.onDrag = onDrag
-    this.onDrop = onDrop
+    this.options = options;
+    this.onDrag = onDrag;
+    this.onDrop = onDrop;
 
     this.list = options.list;
     this.init();
   }
 
-  set(key: keyof SortableOptions, value: never) {
+  set (key: keyof SortableOptions, value: never): void {
     if (key === 'list') {
       this.list = value;
       // When the list data changes when dragging, need to execute onDrag function
